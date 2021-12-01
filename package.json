@@ -6,7 +6,10 @@
   "dependencies": {
     "@hapi/boom": "^9.1.4",
     "cors": "^2.8.5",
-    "joi": "^17.4.2"
+    "express": "^4.17.1",
+    "faker": "^5.5.3",
+    "joi": "^17.4.2",
+    "sequelize": "^6.12.0-alpha.1"
   },
   "devDependencies": {
     "eslint": "^8.3.0",
@@ -17,8 +20,8 @@
     "prettier": "^2.5.0"
   },
   "scripts": {
-    "dev": "nodemon index.js",
-    "start": "node index.js",
+    "dev": "nodemon src/index.js",
+    "start": "node src/index.js",
     "lint": "eslint"
   },
   "keywords": [
