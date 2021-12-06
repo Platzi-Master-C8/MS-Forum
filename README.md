@@ -40,7 +40,7 @@ You can get a list of all invoices using endpoint `/api/discussions/{id}` by a G
 	"id": 1, 
 	"title": "Example Title",
 	"content": "Example Content",
-	"category": "Web Development",
+	"category": 1,
 	"created_at": "2012-04-23T18:25:43.511Z",
 	"created_by": 1,
 	"modified_at": null,
@@ -64,12 +64,12 @@ This will return the created discussion with void comments as:
 	"id": 1, 
 	"title": "Example Title",
 	"content": "Example Content",
-	"category": "Web Development",
+	"category": 1,
 	"created_at": "2012-04-23T18:25:43.511Z",
 	"created_by": 1,
 	"modified_at": null,
 	"modified_by": null,
-	"status": "Open",
+	"status": 1,
 	"discussion_version_no": 1
 }
 ```

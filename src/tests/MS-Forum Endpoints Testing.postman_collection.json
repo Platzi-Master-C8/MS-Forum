@@ -1,0 +1,127 @@
+{
+	"info": {
+		"_postman_id": "c3efaad5-54ae-473d-a31f-770a773ce93a",
+		"name": "MS-Forum Endpoints Testing",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Discussions",
+			"item": [
+				{
+					"name": "Create Discussion",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{  \r\n\t\"title\": \"Example Title\",\r\n\t\"content\": \"Example Content\",\r\n\t\"category\": 1,\r\n    \"created_by\": 1\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{URL}}/api/discussions/",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"api",
+								"discussions",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get a discussion",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{URL}}/api/discussions/5",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"api",
+								"discussions",
+								"5"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get all discussions",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{URL}}/api/discussions/",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"api",
+								"discussions",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update a discussion",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{  \r\n\t\"title\": \"Example Title\",\r\n\t\"content\": \"Example Content\",\r\n\t\"category\": 1,\r\n    \"created_by\": 1\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{URL}}/api/discussions/5",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"api",
+								"discussions",
+								"5"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete a discussion",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{URL}}/api/discussions/5",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"api",
+								"discussions",
+								"5"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
