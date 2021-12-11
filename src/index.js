@@ -1,23 +1,21 @@
-const express = require('express');
+const express = require('express')
 const cors = require('cors');
-const { logErrors, errorHandler } = require('./middlewares/error.handler');
-const routerApi = require('./routes');
+const { dataReviver } = require('./helpers/utils')
 
-const app = express();
-const port = 3001;
+const { logErrors, errorHandler } = require('./middlewares/error.handler')
+const routerApi = require('./routes')
 
-app.use(express.json());
+const app = express()
+const port = 3001
+
+app.use(express.json({reviver:dataReviver}))
+app.use(cors())
+routerApi(app)
 
 
-app.use(cors());
-
-routerApi(app);
-
-
-app.use(logErrors);
-app.use(errorHandler);
+app.use(logErrors)
+app.use(errorHandler)
 
 app.listen(port, () => {
-  console.log('App listening on port: ' +  port);
-});
-
+  console.log('App listening on port: ' +  port)
+})
