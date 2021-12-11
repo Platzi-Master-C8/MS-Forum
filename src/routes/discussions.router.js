@@ -1,3 +1,4 @@
+
 const express = require('express')
 
 const router = express.Router()
@@ -14,8 +15,10 @@ router.get('/', async (req, res) => {
 })
 
 
+
 router.get('/:id', async (req, res, next) => {
     try {
+
       const { id } = req.params
       const discussion = await discussionsService.findById(parseInt(id))
       res.json(discussion)

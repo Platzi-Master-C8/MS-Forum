@@ -1,4 +1,5 @@
 function logErrors (err, req, res, next) {
+
     console.log('logErrors')
     console.error(err)
     next(err)
@@ -10,7 +11,6 @@ function logErrors (err, req, res, next) {
       message: err.message,
       stack: err.stack,
     })
-  }
-  
+
   
   module.exports = { logErrors, errorHandler }

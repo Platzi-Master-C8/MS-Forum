@@ -1,9 +1,12 @@
+
 const faker = require('faker')
 const {getRandomIntInclusive} = require('../helpers/utils')
+
 
 class DiscussionsService {
 
   constructor(){
+
     this.discussions = []
     this.generate()
   }
@@ -11,6 +14,7 @@ class DiscussionsService {
   generate() {
     const limit = 100
     for (let index = 0 ; index < limit ; index++) {
+
       this.discussions.push({
          
             "id": index, 
@@ -25,11 +29,14 @@ class DiscussionsService {
             "is_active": getRandomIntInclusive(0,1) ? true : false,
             "discussion_version_no": 1
         
+
       })
+
     }
   }
 
   create(data) {
+
     const title = data.title
     const content = data.content
     const category = data.category
@@ -40,6 +47,7 @@ class DiscussionsService {
     //const status = data.status
     //const is_active = data.is_active
     //const discussion_version_no = data.discussion_version_no
+
 
     const discussionData = {
         title: title,
@@ -57,12 +65,15 @@ class DiscussionsService {
         id: this.nextId(),
         ...discussionData,
       }
+
       this.discussions.push(newDiscussion)
       return newDiscussion
+
 
   }
 
   find() {
+
     return this.discussions
   }
 
@@ -76,12 +87,14 @@ class DiscussionsService {
       throw new Error('discussion not found')
     }
     const discussion = this.discussions[index]
+
     this.discussions[index] = {
       ...discussion,
       ...changes,
         modified_at:Date.now(),
         modified_by: 1,
         status:2
+
     }
     return this.discussions[index]
   }
@@ -96,9 +109,12 @@ class DiscussionsService {
   }
   nextId() {
     return this.discussions.length + 1
+
   }
   
 
 }
 
+
 module.exports = DiscussionsService
+
