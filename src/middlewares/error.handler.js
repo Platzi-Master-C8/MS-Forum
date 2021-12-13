@@ -11,6 +11,7 @@ function logErrors (err, req, res, next) {
       message: err.message,
       stack: err.stack,
     })
+  }
 
   
   module.exports = { logErrors, errorHandler }
