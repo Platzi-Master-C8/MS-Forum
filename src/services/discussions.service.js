@@ -1,7 +1,7 @@
 
 const faker = require('faker')
 const {getRandomIntInclusive} = require('../helpers/utils')
-
+const dummyJson = require('../tests/dummy-data.json')
 
 class DiscussionsService {
 
@@ -12,15 +12,33 @@ class DiscussionsService {
   }
 
   generate() {
+
+    dummyJson.discussions.forEach(item => {
+      
+      const discussionData = {
+        id: this.nextId(),
+        ...item,
+        "category": getRandomIntInclusive(1,3),
+        "created_at":faker.date.recent(),
+        "created_by": getRandomIntInclusive(1,200),
+        "modified_at": null,
+        "modified_by": null,
+        "status": 1,
+        "is_active": true,
+        "discussion_version_no": 1
+       }
+       this.discussions.push(discussionData)
+      })
+   
     const limit = 100
     for (let index = 0 ; index < limit ; index++) {
 
       this.discussions.push({
          
-            "id": index, 
+            "id": this.nextId(), 
             "title": faker.hacker.phrase(),
             "content": faker.hacker.phrase(),
-            "category": getRandomIntInclusive(1,6),
+            "category": getRandomIntInclusive(1,3),
             "created_at":faker.date.recent(),
             "created_by": getRandomIntInclusive(1,200),
             "modified_at": null,
