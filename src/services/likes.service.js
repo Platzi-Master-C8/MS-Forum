@@ -1,6 +1,8 @@
 const faker = require('faker')
 const {getRandomIntInclusive} = require('../helpers/utils')
 
+const { models } = require('./../libs/sequelize');
+
 class LikesService {
 
   constructor(){
