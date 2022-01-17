@@ -29,29 +29,24 @@ class LikesService {
 
   async giveLike(data){
 
-    const discussionId = data.discussionId
+    const discussionIdBody = data.discussionId
+    const userIdBody = data.userId
     
-    const userId= data.userId
-    
-    const index= this.discussionLikes.findIndex(like => like.discussionId=== discussionId && like.userId===userId)
-    
-    const currentdiscussionLikes = this.discussionLikes.filter(like => like.discussionId=== discussionId && like.isActive).length
-    
-    if (index===-1)
-    {
-      return {...this.create(data),
-              currentdiscussionLikes:currentdiscussionLikes+1  
+    const like = await models.Likes.findOne({ where: {discussionId: discussionIdBody, likedBy: userIdBody}});
+    const countdiscussionLikes = await models.Likes.count({where: {discussionId: discussionIdBody}});
+
+    if (like === null){
+      const newLike = await models.Likes.create({isActive: true, likedAt: new Date(), discussionId: discussionIdBody, likedBy: userIdBody});
+      return {...newLike.dataValues,
+              currentdiscussionLikes: countdiscussionLikes+1
       }
     }
 
-    this.discussionLikes[index]= {
-      ...this.discussionLikes[index],
-      isActive : !this.discussionLikes[index].isActive
-    }
+    const rta = await like.update({isActive: !like.dataValues.isActive});
 
     return {
-      ...this.discussionLikes[index],
-      currentdiscussionLikes: this.discussionLikes[index].isActive ? currentdiscussionLikes+1: currentdiscussionLikes-1
+      ...rta.dataValues,
+      currentdiscussionLikes: rta.dataValues.isActive ? countdiscussionLikes+1: countdiscussionLikes-1
     }
 
   }
@@ -86,30 +81,50 @@ class LikesService {
   }
 
   async findById(id){
-    const filteredDiscussionLikes= this.discussionLikes.filter(like => like.id ===id)
-    return this.currentdiscussionLikes(filteredDiscussionLikes,"discussionId")
-    }
+    const rta = await models.Likes.findByPk(id);
+    return rta;
+
+  }
 
   async findDiscussionLikes() {
-    return this.discussionLikes
+    const rta = await models.Likes.findAll();
+    return rta;
   }
 
   async findUserLikes(userId) {
-    
-    const filteredDiscussionLikes= this.discussionLikes.filter(like =>like.userId === userId)
-    return this.currentdiscussionLikes(filteredDiscussionLikes,"discussionId")
+    const LikesByUserFiltered = await models.Likes.findAll({ where: {likedBy: userId}});
+    const LikesByUserTotal = await Promise.all(
+      LikesByUserFiltered.map(async function(like) {
+        const countdiscussionLikes = await models.Likes.count({where: {discussionId: like.dataValues.discussionId}});
+        return {...like.dataValues,
+                currentdiscussionLikes: countdiscussionLikes}
+    }));
+    return LikesByUserTotal;
   }
 
   async findByDiscussionId(discussionId, userId=0){
-    let discussionLikesFiltered 
+    let discussionLikesFiltered;
+    let countdiscussionLikes; 
     if (userId===0){
-      discussionLikesFiltered = this.discussionLikes.filter(like => like.discussionId === discussionId)
+      discussionLikesFiltered = await models.Likes.findAll({ where: {discussionId: discussionId}});
+      
+      const newDiscussionLikesFiltered = await Promise.all(
+        discussionLikesFiltered.map(async function(like) {
+          const countdiscussionLikes = await models.Likes.count({where: {discussionId: discussionId}});
+          return {...like.dataValues,
+                  currentdiscussionLikes: countdiscussionLikes}
+      }));
+
+      return newDiscussionLikesFiltered;
     }
     else{
-      discussionLikesFiltered = this.discussionLikes.filter(like => like.discussionId === discussionId && like.userId === userId)
+      discussionLikesFiltered = await models.Likes.findOne({ where: {discussionId: discussionId, likedBy: userId}});
+      countdiscussionLikes = await models.Likes.count({where: {discussionId: discussionId}});
+
+      return {...discussionLikesFiltered.dataValues,
+        currentdiscussionLikes: countdiscussionLikes
+      }
     }
-    
-    return this.currentdiscussionLikes(discussionLikesFiltered,"discussionId")
   }
 
   filterActivelikes(likes){
