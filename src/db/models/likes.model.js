@@ -40,6 +40,7 @@ class Likes extends Model{
         return {
             sequelize,
             tableName: LIKES_TABLE,
+            schema:'sch_comm',
             modelName: 'Likes',
             timestamps: false
         }
