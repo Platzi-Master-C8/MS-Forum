@@ -2,26 +2,53 @@
 const faker = require('faker')
 const {getRandomIntInclusive} = require('../helpers/utils')
 
+const dummyJson = require('../tests/dummy-data.json')
+const Postgres = require('../libs/postgres')
+
+const {models}= require ('./../libs/sequelize')
 
 class DiscussionsService {
 
   constructor(){
 
     this.discussions = []
+
+    this.client = new Postgres();
+
     this.generate()
   }
 
   generate() {
+
+
+    dummyJson.demo_discussions.forEach(item => {
+      
+      const discussionData = {
+        id: this.nextId(),
+        ...item,
+        "category": getRandomIntInclusive(1,3),
+        "created_at":new Date(faker.date.recent()),
+        "created_by": getRandomIntInclusive(1,200),
+        "modified_at": null,
+        "modified_by": null,
+        "status": 1,
+        "is_active": true,
+        "discussion_version_no": 1
+       }
+       this.discussions.push(discussionData)
+      })
+
     const limit = 100
     for (let index = 0 ; index < limit ; index++) {
 
       this.discussions.push({
          
-            "id": index, 
+
+            "id": this.nextId(), 
             "title": faker.hacker.phrase(),
             "content": faker.hacker.phrase(),
-            "category": getRandomIntInclusive(1,6),
-            "created_at":faker.date.recent(),
+            "category": getRandomIntInclusive(1,3),
+            "created_at":new Date(faker.date.recent()),
             "created_by": getRandomIntInclusive(1,200),
             "modified_at": null,
             "modified_by": null,
@@ -35,79 +62,49 @@ class DiscussionsService {
     }
   }
 
-  create(data) {
 
-    const title = data.title
-    const content = data.content
-    const category = data.category
-    //const created_at = data.created_at
-    const created_by = data.created_by
-    //const modified_at = data.modified_at
-    //const modified_by = data.modified_by
-    //const status = data.status
-    //const is_active = data.is_active
-    //const discussion_version_no = data.discussion_version_no
+  async create(data) {
 
+    
+    
 
-    const discussionData = {
-        title: title,
-        content: content,
-        category: category,
-        created_at: Date.now(),
-        created_by: created_by,
-        modified_at: null,
-        modified_by: null,
-        status: 1,
-        is_active: true,
-        discussion_version_no: 1
-    }
-    const newDiscussion = {
-        id: this.nextId(),
-        ...discussionData,
-      }
-
-      this.discussions.push(newDiscussion)
+      const newDiscussion= await models.Discussion.create(data)
       return newDiscussion
-
+      
 
   }
 
-  find() {
-
-    return this.discussions
+  async find() {
+    const allDiscussions= await models.Discussion.findAll()
+    
+    return allDiscussions
+    
   }
 
-  findById(id) {
-    return this.discussions.find(item => item.id === id)
-  }
-
-  update(id,changes) {
-    const index = this.discussions.findIndex(item => item.id === id)
-    if (index === -1) {
+  async findById(id) {
+    const discussion = await models.Discussion.findByPk(id)
+    if (!discussion) {
       throw new Error('discussion not found')
     }
-    const discussion = this.discussions[index]
-
-    this.discussions[index] = {
-      ...discussion,
-      ...changes,
-        modified_at:Date.now(),
-        modified_by: 1,
-        status:2
-
-    }
-    return this.discussions[index]
+    return discussion
   }
 
-  delete(id) {
-    const index = this.discussions.findIndex(item => item.id === id)
-    if (index === -1) {
+  async update(id,changes) {
+    const discussion = await this.findById(id)
+    const answer = await discussion.update(changes)
+    return answer
+  }
+
+  async delete(id) {
+    const discussion = await this.findById(id)
+    if (!discussion) {
       throw new Error('discussion not found')
     }
-    this.discussions.splice(index, 1)
-    return { id }
+    await discussion.destroy()
+    return {id}
   }
-  nextId() {
+  async nextId() {
+
     return this.discussions.length + 1
 
   }

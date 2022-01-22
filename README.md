@@ -2,7 +2,21 @@
 This backend API is used as an interface for Forum interaction with backend. 
 
 ## Steps to run & deploy
-### Load and Connect Database
+
+### Initial setup
+For local environment setup for first time, please copy information from file .env.example to .env and run following command: 
+
+   docker-compose up -d
+
+that will setup postgres and PGAdmin 4 for initial setup.
+
+After that, run all migrations: 
+
+    migrations:run
+
+After migrations are completed as an aditional step you can copy information inside ./tests/dummy-data.json and create a file under ./src/data/ with the name seed_data.json. It contains the information for demo/testing purposes. 
+
+
 
 ### Running in dev
 For running your server in dev environment please use the following command: 
@@ -41,21 +55,26 @@ You can get a list of all invoices using endpoint `/api/discussions/{id}` by a G
 	"title": "Example Title",
 	"content": "Example Content",
 	"category": 1,
-	"created_at": "2012-04-23T18:25:43.511Z",
-	"created_by": 1,
-	"modified_at": null,
-	"modified_by": null,
+
+	"createdAt": "2012-04-23T18:25:43.511Z",
+	"userId": 1,
+	"modifiedAt": null,
+	"modifiedBy": null,
 	"status": 1,
-	"discussion_version_no": 1
+	"discussionVersionNo": 1
 }
 ```
 ### Create a new discussion
-You can create a new discussion using endpoint `/api/discussions/create` by a POST HTTP request with following body: 
+You can create a new discussion using endpoint `/api/discussions` by a POST HTTP request with following body: 
+
 ```json
 {  
 	"title": "Example Title",
 	"content": "Example Content",
-	"category": 1,
+
+	"categoryId": 1,
+    "userId": 1
+
 }
 ```
 This will return the created discussion with void comments as: 
@@ -65,12 +84,14 @@ This will return the created discussion with void comments as:
 	"title": "Example Title",
 	"content": "Example Content",
 	"category": 1,
-	"created_at": "2012-04-23T18:25:43.511Z",
-	"created_by": 1,
-	"modified_at": null,
-	"modified_by": null,
+
+	"createdAt": "2012-04-23T18:25:43.511Z",
+	"userId": 1,
+	"modifiedAt": null,
+	"modifiedBy": null,
 	"status": 1,
-	"discussion_version_no": 1
+	"discussionVersionNo": 1
+
 }
 ```
 ### Get all discussion likes
@@ -114,7 +135,8 @@ You can give like to an existing discussion using endpoint `/api/likes/discussio
 ```json
 {  
 	"discussionId": 1,
-	"user_id": 2
+	"userId": 2
+
 }	
 ```
 This will return the created like as: 
