@@ -1,4 +1,5 @@
 const express = require('express')
+
 const cors = require('cors')
 const { dataReviver } = require('./helpers/utils')
 const result = require ('dotenv').config()
@@ -13,6 +14,7 @@ if (result.error) {
 
 const app = express()
 const port = config.port|| 3001
+
 
 app.use(express.json({reviver:dataReviver}))
 app.use(cors())

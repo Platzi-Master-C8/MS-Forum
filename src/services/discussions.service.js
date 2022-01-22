@@ -1,20 +1,25 @@
 
 const faker = require('faker')
 const {getRandomIntInclusive} = require('../helpers/utils')
+
 const dummyJson = require('../tests/dummy-data.json')
 const Postgres = require('../libs/postgres')
 
 const {models}= require ('./../libs/sequelize')
+
 class DiscussionsService {
 
   constructor(){
 
     this.discussions = []
+
     this.client = new Postgres();
+
     this.generate()
   }
 
   generate() {
+
 
     dummyJson.demo_discussions.forEach(item => {
       
@@ -32,12 +37,13 @@ class DiscussionsService {
        }
        this.discussions.push(discussionData)
       })
-   
+
     const limit = 100
     for (let index = 0 ; index < limit ; index++) {
 
       this.discussions.push({
          
+
             "id": this.nextId(), 
             "title": faker.hacker.phrase(),
             "content": faker.hacker.phrase(),
@@ -55,6 +61,7 @@ class DiscussionsService {
 
     }
   }
+
 
   async create(data) {
 
@@ -97,6 +104,7 @@ class DiscussionsService {
     return {id}
   }
   async nextId() {
+
     return this.discussions.length + 1
 
   }

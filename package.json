@@ -10,7 +10,9 @@
     "express": "^4.17.1",
     "faker": "^5.5.3",
     "joi": "^17.5.0",
+
     "pg": "^8.7.1",
+
     "sequelize": "^6.12.0-beta.2"
   },
   "engine": {
@@ -22,12 +24,15 @@
     "eslint-plugin-prettier": "^4.0.0",
     "jest": "^27.4.4",
     "nodemon": "^2.0.15",
+
     "prettier": "^2.5.1",
     "sequelize-cli": "^6.4.1"
+
   },
   "scripts": {
     "dev": "nodemon src/index.js",
     "start": "node src/index.js",
+
     "lint": "eslint",
     "migrations:generate": "sequelize-cli migration:generate --name",
     "migrations:run": "sequelize-cli db:migrate",
@@ -40,9 +45,6 @@
     "seeds:load": "sequelize-cli db:seed:all --name",
     "seeds:load_all":"sequelize-cli db:seed:all",
     "seeds:undo_all":"sequelize-cli db:seed:undo:all"
-    
-
-
 
   },
   "keywords": [
