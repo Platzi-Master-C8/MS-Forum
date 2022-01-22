@@ -6,46 +6,39 @@
   "dependencies": {
     "@hapi/boom": "^9.1.4",
     "cors": "^2.8.5",
-    "dotenv": "^10.0.0",
+    
     "express": "^4.17.1",
     "faker": "^5.5.3",
     "joi": "^17.5.0",
-
     "pg": "^8.7.1",
-
     "sequelize": "^6.12.0-beta.2"
   },
   "engine": {
-    "node": "12.x"
+    "node": "16.x"
   },
   "devDependencies": {
+    "dotenv": "^10.0.0",
     "eslint": "^8.4.1",
     "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-prettier": "^4.0.0",
     "jest": "^27.4.4",
     "nodemon": "^2.0.15",
-
     "prettier": "^2.5.1",
-    "sequelize-cli": "^6.4.1"
-
+    "sequelize-cli": "^6.4.1",
+    "dotenv-cli": "^4.1.1"
   },
   "scripts": {
-    "dev": "nodemon src/index.js",
+    "dev": "dotenv -e .env nodemon src/index.js",
     "start": "node src/index.js",
-
+    "prueba": "nodemon test.js",
     "lint": "eslint",
-    "migrations:generate": "sequelize-cli migration:generate --name",
-    "migrations:run": "sequelize-cli db:migrate",
-    "migrations:revert": "sequelize-cli db:migrate:undo",
+    "migrations:generate": "dotenv -e .env sequelize-cli migration:generate --name",
+    "migrations:run": " dotenv -e .env sequelize db:migrate",
+    "migrations:revert": " dotenv -e .env sequelize-cli db:migrate:undo",
     "migrations:delete": "sequelize-cli db:migrate:undo:all",
-    "seeds:generate": "sequelize-cli seed:generate --name",
-    "seeds:generate_categories": "sequelize-cli seed:generate --name categories",
-    "seeds:generate_discussion_statuses": "sequelize-cli seed:generate --name discussion_statuses",
-    "seeds:generate_demo_discussions": "sequelize-cli seed:generate --name demo_discussions",
-    "seeds:load": "sequelize-cli db:seed:all --name",
-    "seeds:load_all":"sequelize-cli db:seed:all",
-    "seeds:undo_all":"sequelize-cli db:seed:undo:all"
-
+    "seeds:generate": "dotenv -e .env sequelize-cli seed:generate --name",
+    "seeds:load_all": "dotenv -e .env sequelize-cli db:seed:all",
+    "seeds:undo_all": "dotenv -e .env sequelize-cli db:seed:undo:all"
   },
   "keywords": [
     "JS",

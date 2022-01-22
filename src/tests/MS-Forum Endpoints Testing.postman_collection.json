@@ -122,7 +122,6 @@
 					"response": []
 				}
 			]
-
 		},
 		{
 			"name": "Discussion Likes",
@@ -408,6 +407,55 @@
 								"1"
 							]
 						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Contributions",
+			"item": [
+				{
+					"name": "Create Contribution",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{  \r\n\t\r\n  \"content\": \"Pa ke kieres saber eso jaja salu2\",\r\n  \"userId\": 1,\r\n  \"contributionTypeId\": 1, \r\n  \"discussionId\":1\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{URL}}/api/contributions/",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"api",
+								"contributions",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get comments",
+					"request": {
+						"method": "GET",
+						"header": []
+					},
+					"response": []
+				},
+				{
+					"name": "Get Questions",
+					"request": {
+						"method": "GET",
+						"header": []
 					},
 					"response": []
 				}
