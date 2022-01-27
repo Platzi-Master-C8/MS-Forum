@@ -89,6 +89,7 @@ class Discussion extends Model{
         static associate(models){
             this.belongsTo(models.Category, {as:'category'} )
             this.belongsTo(models.DiscussionStatus, {as:'status'} )
+            this.hasMany(models.Contribution, {as:'contributions', foreignKey: 'id'})
         }
     
         static config(sequelize){

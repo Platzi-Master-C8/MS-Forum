@@ -251,6 +251,35 @@ Also you can use `groupBy` to obtain the count of every discussion (`/api/likes/
 
 
 if nothing is found, then you will receive a 404 HTTP status. 
+
+
+### Create a new Contribution
+You can create a new discussion using endpoint `/api/contributions` by a POST HTTP request with following body: 
+
+```json
+{  
+	 
+	
+  "content": "Example Contribution",
+  "userId": 1,
+  "contributionTypeId": 2, 
+  "discussionId":1
+
+
+}
+```
+
+Remember that contributionTypeId corresponds to either comments (1) or questions (2)
+
+### Get contributions for a particular discussion
+You can ask for contributions from a particular discussion if you have the discussionId and you have three different ways to ask for it:
+
+by a GET HTTP request to endpoint `/api/contributions/{discussionId}`: this will give you the contributions for a particular discussion.
+
+by by a GET HTTP request to endpoint `/api/contributions/{discussionId}/comments`: this will give you the contribution comments.
+
+by a GET HTTP request to endpoint `/api/contributions/{discussionId}/questions`: this will give you the contribution questions.
+
 ## To Do
 
 
