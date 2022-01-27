@@ -139,5 +139,43 @@
         "created_at": "2022-01-18T00:00:00.000Z",
         "is_active": true
     }
+],
+"contribution_node_types":[
+    {
+        "description": "Root",
+        "created_at": "2022-01-25T00:00:00.000Z",
+        "is_active": true
+    },
+    {
+        "description": "Node",
+        "created_at": "2022-01-25T00:00:00.000Z",
+        "is_active": true
+    },
+    {
+        "description": "Leaf",
+        "created_at": "2022-01-25T00:00:00.000Z",
+        "is_active": true
+    }
+],
+"contribution_types":[
+    {
+        "description": "Comment",
+        "created_at": "2022-01-25T00:00:00.000Z",
+        "is_active": true
+    },
+    {
+        "description": "Question",
+        "created_at": "2022-01-25T00:00:00.000Z",
+        "is_active": true
+    },
+    {
+        "description": "Answer",
+        "created_at": "2022-01-25T00:00:00.000Z",
+        "is_active": true
+    }
 ]
+
+
+
+
 }
