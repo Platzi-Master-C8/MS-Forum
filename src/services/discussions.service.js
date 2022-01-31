@@ -74,8 +74,21 @@ class DiscussionsService {
 
   }
 
-  async find() {
-    const allDiscussions= await models.Discussion.findAll()
+  async find(query) {
+    const options = {
+      where: {
+        isActive: true
+      }
+    }
+    const {limit, offset} = query
+
+    if (limit && offset) {
+      options.offset = offset
+      options.limit = limit
+    }
+    const allDiscussions= await models.Discussion.findAndCountAll(options)
+
+
     
     return allDiscussions
     

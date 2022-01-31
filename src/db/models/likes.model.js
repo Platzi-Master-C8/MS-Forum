@@ -1,8 +1,10 @@
 const { Model, DataTypes, Sequelize } = require('sequelize');
+const { config } = require('../../config/config');
+const { DISCUSSION_TABLE } = require('./../models/discussion.model');
 
-const LIKES_TABLE = 'discussion_likes';
+const DISCUSSION_LIKES_TABLE = 'netw_discussion_likes';
 
-const LikesSchema = {
+const DiscussionLikesSchema = {
     id: {
         allowNull: false,
         autoIncrement: true,
@@ -10,41 +12,50 @@ const LikesSchema = {
         type: DataTypes.INTEGER
     },
     isActive: {
-        allowNull: false,
+        allowNull: true,
         type: DataTypes.BOOLEAN,
-        field: 'is_active'
+        field: 'is_active',
+        default: true
     },
     likedAt: {
-        allowNull: false,
+        allowNull: true,
         type: DataTypes.DATE,
-        field: 'liked_at'
+        field: 'liked_at',
+        default: Sequelize.NOW
     },
     discussionId: {
-        allowNull: false,
         type: DataTypes.INTEGER,
-        field: 'discussion_id'
+        allowNull: false,
+        foreignKey: true,
+        field: 'discussion_id',
+        references: {
+            model: DISCUSSION_TABLE,
+            key: 'id'
+        },
+        onUpdate: 'CASCADE',
+        onDelete: 'SET NULL'
     },
-    likedBy: {
+    userId: {
         allowNull: false,
         type: DataTypes.INTEGER,
-        field: 'liked_by'
+        field: 'user_Id'
     }
 }
 
-class Likes extends Model{
-    static associate() {
-        //associate
+class DiscussionLikes extends Model{
+    static associate(models) {
+        this.belongsTo(models.Discussion, {as:'discussion'})
     }
 
     static config(sequelize) {
         return {
             sequelize,
-            tableName: LIKES_TABLE,
-            schema:'sch_comm',
-            modelName: 'Likes',
+            tableName: DISCUSSION_LIKES_TABLE,
+            schema:config.dbSchema,
+            modelName: 'DiscussionLikes',
             timestamps: false
         }
     }
 }
 
-module.exports = { LIKES_TABLE, LikesSchema, Likes }
+module.exports = { DISCUSSION_LIKES_TABLE, DiscussionLikesSchema, DiscussionLikes }

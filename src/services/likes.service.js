@@ -32,21 +32,22 @@ class LikesService {
     const discussionIdBody = data.discussionId
     const userIdBody = data.userId
     
-    const like = await models.Likes.findOne({ where: {discussionId: discussionIdBody, likedBy: userIdBody}});
-    const countdiscussionLikes = await models.Likes.count({where: {discussionId: discussionIdBody}});
+    const like = await models.DiscussionLikes.findOne({ where: {discussionId: discussionIdBody, userId: userIdBody}});
+    
 
     if (like === null){
-      const newLike = await models.Likes.create({isActive: true, likedAt: new Date(), discussionId: discussionIdBody, likedBy: userIdBody});
+      const newLike = await models.DiscussionLikes.create({isActive: true, likedAt: new Date(), discussionId: discussionIdBody, userId: userIdBody});
+      const countdiscussionLikesUpdate = await models.DiscussionLikes.count({where: {discussionId: discussionIdBody, isActive: true}});
       return {...newLike.dataValues,
-              currentdiscussionLikes: countdiscussionLikes+1
+              currentdiscussionLikes: countdiscussionLikesUpdate
       }
     }
 
     const rta = await like.update({isActive: !like.dataValues.isActive});
-
+    const countdiscussionLikes = await models.DiscussionLikes.count({where: {discussionId: discussionIdBody, isActive: true}});
     return {
       ...rta.dataValues,
-      currentdiscussionLikes: rta.dataValues.isActive ? countdiscussionLikes+1: countdiscussionLikes-1
+      currentdiscussionLikes: countdiscussionLikes
     }
 
   }
@@ -81,21 +82,21 @@ class LikesService {
   }
 
   async findById(id){
-    const rta = await models.Likes.findByPk(id);
+    const rta = await models.DiscussionLikes.findByPk(id);
     return rta;
 
   }
 
   async findDiscussionLikes() {
-    const rta = await models.Likes.findAll();
+    const rta = await models.DiscussionLikes.findAll();
     return rta;
   }
 
   async findUserLikes(userId) {
-    const LikesByUserFiltered = await models.Likes.findAll({ where: {likedBy: userId}});
+    const LikesByUserFiltered = await models.DiscussionLikes.findAll({ where: {userId: userId}});
     const LikesByUserTotal = await Promise.all(
       LikesByUserFiltered.map(async function(like) {
-        const countdiscussionLikes = await models.Likes.count({where: {discussionId: like.dataValues.discussionId}});
+        const countdiscussionLikes = await models.DiscussionLikes.count({where: {discussionId: like.dataValues.discussionId}});
         return {...like.dataValues,
                 currentdiscussionLikes: countdiscussionLikes}
     }));
@@ -106,11 +107,11 @@ class LikesService {
     let discussionLikesFiltered;
     let countdiscussionLikes; 
     if (userId===0){
-      discussionLikesFiltered = await models.Likes.findAll({ where: {discussionId: discussionId}});
+      discussionLikesFiltered = await models.DiscussionLikes.findAll({ where: {discussionId: discussionId}});
       
       const newDiscussionLikesFiltered = await Promise.all(
         discussionLikesFiltered.map(async function(like) {
-          const countdiscussionLikes = await models.Likes.count({where: {discussionId: discussionId}});
+          const countdiscussionLikes = await models.DiscussionLikes.count({where: {discussionId: discussionId}});
           return {...like.dataValues,
                   currentdiscussionLikes: countdiscussionLikes}
       }));
@@ -118,8 +119,8 @@ class LikesService {
       return newDiscussionLikesFiltered;
     }
     else{
-      discussionLikesFiltered = await models.Likes.findOne({ where: {discussionId: discussionId, likedBy: userId}});
-      countdiscussionLikes = await models.Likes.count({where: {discussionId: discussionId}});
+      discussionLikesFiltered = await models.DiscussionLikes.findOne({ where: {discussionId: discussionId, userId: userId}});
+      countdiscussionLikes = await models.DiscussionLikes.count({where: {discussionId: discussionId}});
 
       return {...discussionLikesFiltered.dataValues,
         currentdiscussionLikes: countdiscussionLikes

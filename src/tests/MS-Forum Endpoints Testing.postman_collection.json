@@ -15,7 +15,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{  \r\n\t\"title\": \"Example Title\",\r\n\t\"content\": \"Example Content\",\r\n\t\"category\": 1,\r\n    \"created_by\": 1\r\n}",
+							"raw": "{  \r\n\t\"title\": \"Example Title\",\r\n\t\"content\": \"Example Content\",\r\n\t\"categoryId\": 1,\r\n    \"userId\": 1\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -42,14 +42,14 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{URL}}/api/discussions/5",
+							"raw": "{{URL}}/api/discussions/1",
 							"host": [
 								"{{URL}}"
 							],
 							"path": [
 								"api",
 								"discussions",
-								"5"
+								"1"
 							]
 						}
 					},
@@ -61,7 +61,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{URL}}/api/discussions/",
+							"raw": "{{URL}}/api/discussions/?limit=1&offset=0",
 							"host": [
 								"{{URL}}"
 							],
@@ -69,6 +69,16 @@
 								"api",
 								"discussions",
 								""
+							],
+							"query": [
+								{
+									"key": "limit",
+									"value": "1"
+								},
+								{
+									"key": "offset",
+									"value": "0"
+								}
 							]
 						}
 					},
@@ -265,7 +275,7 @@
 					"response": []
 				},
 				{
-					"name": "Get a discussion like count for user and discussion Copy",
+					"name": "Get a discussion like count for user and discussion",
 					"request": {
 						"method": "GET",
 						"header": [],
