@@ -31,7 +31,9 @@
     "start": "node src/index.js",
     "prueba": "nodemon test.js",
     "lint": "eslint",
+
     "migrations:generate": "sequelize-cli migration:generate --name",
+
     "migrations:run": " dotenv -e .env sequelize db:migrate",
     "migrations:revert": " dotenv -e .env sequelize-cli db:migrate:undo",
     "migrations:delete": "sequelize-cli db:migrate:undo:all",

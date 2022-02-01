@@ -4,7 +4,9 @@ const {DiscussionStatus, DiscussionStatusSchema} = require('../models/discussion
 const { ContributionNodeType, ContributionNodeTypeSchema } = require('./contributionNodeType.model');
 const { ContributionType, ContributionTypeSchema } = require('./contributionType.model');
 const { Contribution, ContributionSchema } = require('./contributions.model');
+
 const { DiscussionLikes, DiscussionLikesSchema } = require('./likes.model');
+
 
 
 function setupModels(sequelize){
@@ -16,7 +18,9 @@ function setupModels(sequelize){
     ContributionType.init(ContributionTypeSchema,ContributionType.config(sequelize))
     Contribution.init(ContributionSchema,Contribution.config(sequelize))
     
+
     DiscussionLikes.init(DiscussionLikesSchema, DiscussionLikes.config(sequelize))
+
 
     Discussion.associate(sequelize.models)
     Category.associate(sequelize.models)
@@ -26,7 +30,9 @@ function setupModels(sequelize){
     ContributionType.associate(sequelize.models)
     Contribution.associate(sequelize.models)
 
+
     DiscussionLikes.associate(sequelize.models)
+
 }
 
 module.exports = setupModels;

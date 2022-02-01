@@ -1,10 +1,12 @@
 const { Model, DataTypes, Sequelize } = require('sequelize');
+
 const { config } = require('../../config/config');
 const { DISCUSSION_TABLE } = require('./../models/discussion.model');
 
 const DISCUSSION_LIKES_TABLE = 'netw_discussion_likes';
 
 const DiscussionLikesSchema = {
+
     id: {
         allowNull: false,
         autoIncrement: true,
@@ -12,6 +14,7 @@ const DiscussionLikesSchema = {
         type: DataTypes.INTEGER
     },
     isActive: {
+
         allowNull: true,
         type: DataTypes.BOOLEAN,
         field: 'is_active',
@@ -45,17 +48,22 @@ const DiscussionLikesSchema = {
 class DiscussionLikes extends Model{
     static associate(models) {
         this.belongsTo(models.Discussion, {as:'discussion'})
+
     }
 
     static config(sequelize) {
         return {
             sequelize,
+
             tableName: DISCUSSION_LIKES_TABLE,
             schema:config.dbSchema,
             modelName: 'DiscussionLikes',
+
             timestamps: false
         }
     }
 }
 
+
 module.exports = { DISCUSSION_LIKES_TABLE, DiscussionLikesSchema, DiscussionLikes }
+
