@@ -45,6 +45,7 @@ port 3000 is the default port and it is not yet configurable.
 ### Get Discussions
 You can get a list of all products using endpoint `/api/discussions`by a GET HTTP Request, this list is used typically by the FrontEnd for picking values. 
 
+This endpoint supports pagination using query params `limit` and `offset` to specify the amount of values required and the 'page' respectively. 
 ### Get Discussion by Id
 You can get a list of all invoices using endpoint `/api/discussions/{id}` by a GET HTTP Request, this list can be used to access to a particular discussion id, it will always retrieve last version created in database. Below is a JSON example of this request answer: 
 
