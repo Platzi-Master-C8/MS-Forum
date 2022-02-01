@@ -1,6 +1,8 @@
 const faker = require('faker')
 const {getRandomIntInclusive} = require('../helpers/utils')
 
+const { models } = require('./../libs/sequelize');
+
 class LikesService {
 
   constructor(){
@@ -27,29 +29,29 @@ class LikesService {
 
   async giveLike(data){
 
-    const discussionId = data.discussionId
+    const discussionIdBody = data.discussionId
+    const userIdBody = data.userId
     
-    const userId= data.userId
+
+    const like = await models.DiscussionLikes.findOne({ where: {discussionId: discussionIdBody, userId: userIdBody}});
     
-    const index= this.discussionLikes.findIndex(like => like.discussionId=== discussionId && like.userId===userId)
-    
-    const currentdiscussionLikes = this.discussionLikes.filter(like => like.discussionId=== discussionId && like.isActive).length
-    
-    if (index===-1)
-    {
-      return {...this.create(data),
-              currentdiscussionLikes:currentdiscussionLikes+1  
+
+    if (like === null){
+      const newLike = await models.DiscussionLikes.create({isActive: true, likedAt: new Date(), discussionId: discussionIdBody, userId: userIdBody});
+      const countdiscussionLikesUpdate = await models.DiscussionLikes.count({where: {discussionId: discussionIdBody, isActive: true}});
+      return {...newLike.dataValues,
+              currentdiscussionLikes: countdiscussionLikesUpdate
       }
     }
 
-    this.discussionLikes[index]= {
-      ...this.discussionLikes[index],
-      isActive : !this.discussionLikes[index].isActive
-    }
 
+    const rta = await like.update({isActive: !like.dataValues.isActive});
+    const countdiscussionLikes = await models.DiscussionLikes.count({where: {discussionId: discussionIdBody, isActive: true}});
     return {
-      ...this.discussionLikes[index],
-      currentdiscussionLikes: this.discussionLikes[index].isActive ? currentdiscussionLikes+1: currentdiscussionLikes-1
+      ...rta.dataValues,
+
+      currentdiscussionLikes: countdiscussionLikes
+
     }
 
   }
@@ -84,30 +86,60 @@ class LikesService {
   }
 
   async findById(id){
-    const filteredDiscussionLikes= this.discussionLikes.filter(like => like.id ===id)
-    return this.currentdiscussionLikes(filteredDiscussionLikes,"discussionId")
-    }
+
+    const rta = await models.DiscussionLikes.findByPk(id);
+
+    return rta;
+
+  }
 
   async findDiscussionLikes() {
-    return this.discussionLikes
+
+    const rta = await models.DiscussionLikes.findAll();
+
+    return rta;
   }
 
   async findUserLikes(userId) {
-    
-    const filteredDiscussionLikes= this.discussionLikes.filter(like =>like.userId === userId)
-    return this.currentdiscussionLikes(filteredDiscussionLikes,"discussionId")
+
+    const LikesByUserFiltered = await models.DiscussionLikes.findAll({ where: {userId: userId}});
+    const LikesByUserTotal = await Promise.all(
+      LikesByUserFiltered.map(async function(like) {
+        const countdiscussionLikes = await models.DiscussionLikes.count({where: {discussionId: like.dataValues.discussionId}});
+
+        return {...like.dataValues,
+                currentdiscussionLikes: countdiscussionLikes}
+    }));
+    return LikesByUserTotal;
   }
 
   async findByDiscussionId(discussionId, userId=0){
-    let discussionLikesFiltered 
+    let discussionLikesFiltered;
+    let countdiscussionLikes; 
     if (userId===0){
-      discussionLikesFiltered = this.discussionLikes.filter(like => like.discussionId === discussionId)
+
+      discussionLikesFiltered = await models.DiscussionLikes.findAll({ where: {discussionId: discussionId}});
+      
+      const newDiscussionLikesFiltered = await Promise.all(
+        discussionLikesFiltered.map(async function(like) {
+          const countdiscussionLikes = await models.DiscussionLikes.count({where: {discussionId: discussionId}});
+
+          return {...like.dataValues,
+                  currentdiscussionLikes: countdiscussionLikes}
+      }));
+
+      return newDiscussionLikesFiltered;
     }
     else{
-      discussionLikesFiltered = this.discussionLikes.filter(like => like.discussionId === discussionId && like.userId === userId)
+
+      discussionLikesFiltered = await models.DiscussionLikes.findOne({ where: {discussionId: discussionId, userId: userId}});
+      countdiscussionLikes = await models.DiscussionLikes.count({where: {discussionId: discussionId}});
+
+
+      return {...discussionLikesFiltered.dataValues,
+        currentdiscussionLikes: countdiscussionLikes
+      }
     }
-    
-    return this.currentdiscussionLikes(discussionLikesFiltered,"discussionId")
   }
 
   filterActivelikes(likes){

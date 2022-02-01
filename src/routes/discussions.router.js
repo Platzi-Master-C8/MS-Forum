@@ -7,9 +7,18 @@ const DiscussionsService = require('../services/discussions.service')
 const discussionsService = new DiscussionsService()
 
 router.get('/', async (req, res) => {
-    
-  const discussions = await discussionsService.find()
-  res.json(discussions) 
+  try{
+    const query= req.query
+  
+    const discussions = await discussionsService.find(query)
+    res.json(discussions) 
+
+  }catch(error){
+    res.status(404).json({
+      message: error.message
+    })
+  }
+  
 
 
 })
