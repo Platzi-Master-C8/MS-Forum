@@ -109,11 +109,17 @@ router.get('/discussions/:id', async (req, res, next) => {
 
   
 
-  router.post('/discussions', async (req, res) => {
+  router.post('/discussions', async (req, res,next) => {
+    
+    try {
     const body = req.body
 
     const like = await likesService.giveLike(body)
     res.json(like)
+    }
+    catch (error) {
+      next(error)
+    }
   })
 
   router.patch('/discussions/:id', async (req, res) => {
