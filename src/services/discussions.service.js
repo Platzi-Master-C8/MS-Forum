@@ -100,10 +100,10 @@ class DiscussionsService {
     }
     let allDiscussions= (await models.Discussion.findAndCountAll(options))
     allDiscussions.rows = allDiscussions.rows.map(item => {
-        item.setDataValue('likes', item.likes.filter(like => like.isActive).length)
+        item.dataValues.likes = item.dataValues.likes.filter(like => like.isActive).length
        
         return item})
-
+    
 
     
     return allDiscussions
