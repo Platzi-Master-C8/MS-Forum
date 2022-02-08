@@ -133,13 +133,13 @@ class LikesService {
     else{
 
       discussionLikesFiltered = await models.DiscussionLikes.findOne({ where: {discussionId: discussionId, userId: userId}});
-      countdiscussionLikes = await models.DiscussionLikes.count({where: {discussionId: discussionId}});
+      countdiscussionLikes = await models.DiscussionLikes.count({where: {discussionId: discussionId, isActive: true}});
 
       if (discussionLikesFiltered === null){
         return {
           
-          discussionId: 2,
-          userId: 2,
+          discussionId: discussionId,
+          userId: userId,
           isActive: false,
           currentdiscussionLikes: countdiscussionLikes
         }
