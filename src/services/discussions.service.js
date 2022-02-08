@@ -90,6 +90,9 @@ class DiscussionsService {
         
         
       },
+      order: [
+        ['createdAt', 'DESC']
+      ],
       
     }
     const {limit, offset} = query
@@ -98,12 +101,14 @@ class DiscussionsService {
       options.offset = offset
       options.limit = limit
     }
+    const discussionsCount = await models.Discussion.count({where: {isActive: true}})
     let allDiscussions= (await models.Discussion.findAndCountAll(options))
     allDiscussions.rows = allDiscussions.rows.map(item => {
         item.dataValues.likes = item.dataValues.likes.filter(like => like.isActive).length
        
         return item})
     
+    allDiscussions.count = discussionsCount
 
     
     return allDiscussions
