@@ -104,6 +104,7 @@ class DiscussionsService {
     const discussionsCount = await models.Discussion.count({where: {isActive: true}})
     let allDiscussions= (await models.Discussion.findAndCountAll(options))
     allDiscussions.rows = allDiscussions.rows.map(item => {
+        //item.dataValues.likedByUser= item.dataValues.likes.contains(query.userId)
         item.dataValues.likes = item.dataValues.likes.filter(like => like.isActive).length
        
         return item})
