@@ -6,8 +6,8 @@ const dummyJson = require('../tests/dummy-data.json')
 const Postgres = require('../libs/postgres')
 
 const {models}= require ('./../libs/sequelize')
-const { DiscussionLikes } = require('../db/models/likes.model')
-const{Sequelize} = require('sequelize');
+
+
 
 class DiscussionsService {
 
@@ -68,8 +68,9 @@ class DiscussionsService {
   async create(data) {
 
     
-    
+      
 
+      
       const newDiscussion= await models.Discussion.create(data)
       return newDiscussion
       

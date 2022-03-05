@@ -1,3 +1,26 @@
+const axios = require('axios')
+const {config} = require ('../config/config')
+
+async function getUser (token){
+  
+    try {
+      const response = await axios.get (`${config.authURL}/auth/user`,{
+        headers: {
+          authorization: `${token}`
+        }
+      
+      });
+      return response.data
+      
+    } catch (error) {
+
+      return undefined
+    }
+}
+
+
+
+
 function getRandomIntInclusive(min, max) {
     min = Math.ceil(min)
     max = Math.floor(max)
@@ -63,5 +86,5 @@ function filterIsActive(data){
   return data.filter(item => item.isActive)
 }
 
-  module.exports = { getRandomIntInclusive, groupBy, countObjectValues, dataReviver  }
+  module.exports = {getUser, getRandomIntInclusive, groupBy, countObjectValues, dataReviver  }
 
