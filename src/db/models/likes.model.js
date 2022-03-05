@@ -41,7 +41,7 @@ const DiscussionLikesSchema = {
     userId: {
         allowNull: false,
         type: DataTypes.INTEGER,
-        field: 'user_id'
+        field: 'user_Id'
     }
 }
 

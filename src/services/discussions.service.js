@@ -6,8 +6,6 @@ const dummyJson = require('../tests/dummy-data.json')
 const Postgres = require('../libs/postgres')
 
 const {models}= require ('./../libs/sequelize')
-const { DiscussionLikes } = require('../db/models/likes.model')
-const{Sequelize} = require('sequelize');
 
 class DiscussionsService {
 
@@ -78,22 +76,9 @@ class DiscussionsService {
 
   async find(query) {
     const options = {
-      /*attributes: { 
-        include: [[Sequelize.fn("COUNT", Sequelize.col("likes")), 'likesCount']]
-      },
-    */
-
-      include: ['likes'],
       where: {
-        isActive: true,
-        //counts the number of likes for each discussion+
-        
-        
-      },
-      order: [
-        ['createdAt', 'DESC']
-      ],
-      
+        isActive: true
+      }
     }
     const {limit, offset} = query
 
@@ -101,15 +86,8 @@ class DiscussionsService {
       options.offset = offset
       options.limit = limit
     }
-    const discussionsCount = await models.Discussion.count({where: {isActive: true}})
-    let allDiscussions= (await models.Discussion.findAndCountAll(options))
-    allDiscussions.rows = allDiscussions.rows.map(item => {
-        //item.dataValues.likedByUser= item.dataValues.likes.contains(query.userId)
-        item.dataValues.likes = item.dataValues.likes.filter(like => like.isActive).length
-       
-        return item})
-    
-    allDiscussions.count = discussionsCount
+    const allDiscussions= await models.Discussion.findAndCountAll(options)
+
 
     
     return allDiscussions
