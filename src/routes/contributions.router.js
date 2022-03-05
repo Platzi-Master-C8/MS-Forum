@@ -1,6 +1,6 @@
 
 const express = require('express')
-
+const utils = require('../helpers/utils')
 const router = express.Router()
 const ContributionsService = require('../services/contributions.service')
 
@@ -52,8 +52,29 @@ router.get('/:discussionId', async (req, res, next) => {
 
   router.post('/', async (req, res, next) => {
     try {
-
+    const token = req.headers['authorization']
     const body = req.body
+    if (!token){
+      return res.status(400).json({
+        message: 'token is required'
+      })
+    }
+    const user = await utils.getUser(token)
+    if (!user){
+      return res.status(400).json({
+        message: 'token is invalid'
+      })
+    }
+    if (typeof body.userId === 'string') {
+      body.userId = parseInt(body.userId)
+    }
+    if (typeof body.contributionTypeId === 'string') {
+      body.contributionTypeId = parseInt(body.contributionTypeId)
+    }
+    if (typeof body.discussionId === 'string') {
+      body.discussionId = parseInt(body.discussionId)
+    }
+    body.userId = user.id
     const contribution = await contributionsService.create(body)
     res.json(contribution)
     }

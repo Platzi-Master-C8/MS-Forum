@@ -1,7 +1,7 @@
 
 const express = require('express')
 const { groupBy,countObjectValues } = require('../helpers/utils')
-
+const utils = require('../helpers/utils')
 const router = express.Router()
 const LikesService = require('../services/likes.service')
 
@@ -112,20 +112,34 @@ router.get('/discussions/:id', async (req, res, next) => {
   router.post('/discussions', async (req, res,next) => {
     
     try {
-    const body = req.body
-    if (!body.userId && !body.discussionId) {
-      return res.status(400).json({
-        error: 'userId and discussionId are required'
-      })
-    }
-    if (typeof body.userId === 'string') {
-      body.userId = parseInt(body.userId)
-    }
-    if (typeof body.discussionId === 'string') {
-      body.discussionId = parseInt(body.discussionId)
-    }
-    const like = await likesService.giveLike(body)
-    res.json(like)
+      const token = req.headers['authorization']
+      const body = req.body
+      if (!token){
+        return res.status(400).json({
+          message: 'token is required'
+        })
+      }
+      const user = await utils.getUser(token)
+      if (!user){
+        return res.status(400).json({
+          message: 'token is invalid'
+        })
+      }
+      body.userId= user.id
+      if (!body.discussionId) {
+        return res.status(400).json({
+          error: 'discussionId is required'
+        })
+      }
+      if (typeof body.userId === 'string') {
+        body.userId = parseInt(body.userId)
+      }
+      if (typeof body.discussionId === 'string') {
+        body.discussionId = parseInt(body.discussionId)
+      }
+
+      const like = await likesService.giveLike(body)
+      res.json(like)
     }
     catch (error) {
       next(error)

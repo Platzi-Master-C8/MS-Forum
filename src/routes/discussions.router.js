@@ -1,6 +1,6 @@
 
 const express = require('express')
-
+const utils = require('../helpers/utils')
 const router = express.Router()
 const DiscussionsService = require('../services/discussions.service')
 
@@ -39,7 +39,27 @@ router.get('/:id', async (req, res, next) => {
 
   router.post('/', async (req, res,next) => {
     try {
+    const token = req.headers['authorization']
     const body = req.body
+
+    if (!token){
+      return res.status(400).json({
+        message: 'token is required'
+      })
+    }
+    const user = await utils.getUser(token)
+    if (!user){
+      return res.status(400).json({
+        message: 'token is invalid'
+      })
+    }
+    if (typeof body.userId === 'string') {
+      body.userId = parseInt(body.userId)
+    }
+    if (typeof body.categoryId === 'string') {
+      body.categoryId = parseInt(body.categoryId)
+    }
+    body.userId = user.id
     const discussion = await discussionsService.create(body)
     res.json(discussion)
     }

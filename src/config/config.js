@@ -8,7 +8,8 @@ const config = {
   dbHost:  process.env.DB_HOST,
   dbName:  process.env.DB_NAME,
   dbPort:  process.env.DB_PORT,
-  dbSchema: process.env.DB_SCHEMA || 'sch_comm'
+  dbSchema: process.env.DB_SCHEMA || 'sch_comm',
+  authURL: process.env.AUTH_URL || 'http://localhost:3002'
 }
 
 module.exports = { config };
