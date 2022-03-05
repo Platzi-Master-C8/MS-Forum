@@ -113,17 +113,7 @@ router.get('/discussions/:id', async (req, res, next) => {
     
     try {
     const body = req.body
-    if (!body.userId && !body.discussionId) {
-      return res.status(400).json({
-        error: 'userId and discussionId are required'
-      })
-    }
-    if (typeof body.userId === 'string') {
-      body.userId = parseInt(body.userId)
-    }
-    if (typeof body.discussionId === 'string') {
-      body.discussionId = parseInt(body.discussionId)
-    }
+
     const like = await likesService.giveLike(body)
     res.json(like)
     }
