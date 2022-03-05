@@ -37,15 +37,10 @@ router.get('/:id', async (req, res, next) => {
     }
   })
 
-  router.post('/', async (req, res,next) => {
-    try {
+  router.post('/', async (req, res) => {
     const body = req.body
     const discussion = await discussionsService.create(body)
     res.json(discussion)
-    }
-    catch (error) {
-      next(error)
-    }
   })
 
   router.patch('/:id', async (req, res) => {
