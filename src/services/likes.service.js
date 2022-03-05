@@ -37,13 +37,13 @@ class LikesService {
     
 
     if (like === null){
-      const newLike = await models.DiscussionLikes.create( {discussionId: discussionIdBody, userId: userIdBody});
+      const newLike = await models.DiscussionLikes.create({isActive: true, likedAt: new Date(), discussionId: discussionIdBody, userId: userIdBody});
       const countdiscussionLikesUpdate = await models.DiscussionLikes.count({where: {discussionId: discussionIdBody, isActive: true}});
       return {...newLike.dataValues,
               currentdiscussionLikes: countdiscussionLikesUpdate
       }
     }
-    
+
 
     const rta = await like.update({isActive: !like.dataValues.isActive});
     const countdiscussionLikes = await models.DiscussionLikes.count({where: {discussionId: discussionIdBody, isActive: true}});
