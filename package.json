@@ -17,7 +17,6 @@
   },
   "devDependencies": {
     "dotenv": "^10.0.0",
-    "dotenv-cli": "^4.1.1",
     "eslint": "^8.4.1",
     "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-prettier": "^4.0.0",
@@ -25,14 +24,16 @@
     "nodemon": "^2.0.15",
     "prettier": "^2.5.1",
     "sequelize-cli": "^6.4.1",
-    "typescript": "^4.5.5"
+    "dotenv-cli": "^4.1.1"
   },
   "scripts": {
     "dev": "dotenv -e .env nodemon src/index.js",
     "start": "node src/index.js",
     "prueba": "nodemon test.js",
     "lint": "eslint",
+
     "migrations:generate": "sequelize-cli migration:generate --name",
+
     "migrations:run": " dotenv -e .env sequelize db:migrate",
     "migrations:revert": " dotenv -e .env sequelize-cli db:migrate:undo",
     "migrations:delete": "sequelize-cli db:migrate:undo:all",
