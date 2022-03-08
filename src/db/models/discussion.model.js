@@ -2,6 +2,7 @@ const {Model, DataTypes, Sequelize} = require('sequelize');
 const {config} = require('../../config/config');
 const {DISCUSSION_STATUS_TABLE} = require('./../models/discussionStatus.model');
 const {CATEGORY_TABLE} = require('./../models/category.model');
+const {USERS_TABLE } = require('./../models/users.model');
 
 const DISCUSSION_TABLE = 'netw_discussions'
 
@@ -35,9 +36,16 @@ const DiscussionSchema ={
         onDelete: 'SET NULL'
     },
     userId: {
-        type: DataTypes.INTEGER,
         allowNull: false,
-        field: 'user_id'
+        type: DataTypes.INTEGER,
+        field: 'user_id',
+        foreignKey: true,
+        references: {
+            model: USERS_TABLE,
+            key: 'id'
+        },
+        onUpdate: 'CASCADE',
+        onDelete: 'SET NULL'
     },
     createdAt: {
         type: DataTypes.DATE,
@@ -89,6 +97,8 @@ class Discussion extends Model{
         static associate(models){
             this.belongsTo(models.Category, {as:'category'} )
             this.belongsTo(models.DiscussionStatus, {as:'status'} )
+            this.belongsTo(models.Users, {as:'users', foreignKey: 'user_id'} )
+
             this.hasMany(models.Contribution, {as:'contributions', foreignKey: 'id'})
 
             this.hasMany(models.DiscussionLikes , {as:'likes', foreignKey: 'discussion_id'})

@@ -104,11 +104,15 @@ class DiscussionsService {
     }
     const discussionsCount = await models.Discussion.count({where: {isActive: true}})
     let allDiscussions= (await models.Discussion.findAndCountAll(options))
-    allDiscussions.rows = allDiscussions.rows.map(item => {
+    allDiscussions.rows = await Promise.all(allDiscussions.rows.map( async item => {
         //item.dataValues.likedByUser= item.dataValues.likes.contains(query.userId)
         item.dataValues.likes = item.dataValues.likes.filter(like => like.isActive).length
+        const userName = await models.Users.findByPk(item.dataValues.userId)
        
-        return item})
+        return {...item.dataValues,
+          userName: userName.dataValues.fullName,
+          profileImage: userName.dataValues.profileImage}
+    }));
     
     allDiscussions.count = discussionsCount
 
@@ -122,7 +126,11 @@ class DiscussionsService {
     if (!discussion) {
       throw new Error('discussion not found')
     }
-    return discussion
+    const userName = await models.Users.findByPk(discussion.dataValues.userId);
+    return {...discussion.dataValues,
+            userName: userName.dataValues.fullName,
+            profileImage: userName.dataValues.profileImage}
+    //return discussion
   }
 
   async update(id,changes) {

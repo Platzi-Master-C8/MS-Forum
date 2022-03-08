@@ -2,6 +2,7 @@ const {Model, DataTypes, Sequelize} = require('sequelize');
 const {config} = require('../../config/config');
 const {DISCUSSION_TABLE} = require('./../models/discussion.model');
 const {CONTRIBUTION_NODE_TYPES_TABLE} = require('./../models/contributionNodeType.model');
+const {USERS_TABLE } = require('./../models/users.model');
 
 const {CONTRIBUTION_TYPES_TABLE} = require('./../models/contributionType.model');
 
@@ -22,9 +23,16 @@ const ContributionSchema ={
    
     
     userId: {
-        type: DataTypes.INTEGER,
+        field: 'user_id',
         allowNull: false,
-        field: 'user_id'
+        type: DataTypes.INTEGER,
+        foreignKey: true,
+        references: {
+            model: USERS_TABLE,
+            key: 'id'
+        },
+        onUpdate: 'CASCADE',
+        onDelete: 'SET NULL'
     },
     discussionId: {
         type: DataTypes.INTEGER,
@@ -88,6 +96,7 @@ class Contribution extends Model{
             this.belongsTo(models.ContributionType, {as:'contributionType'})
             this.belongsTo(models.ContributionNodeType, {as:'contributionNodeType'})
             this.belongsTo(models.Discussion, {as:'discussion'})
+            this.belongsTo(models.Users, {as:'users', foreignKey: 'user_id'} )
             
         }
     
