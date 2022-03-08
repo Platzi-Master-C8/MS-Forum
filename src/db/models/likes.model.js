@@ -2,6 +2,7 @@ const { Model, DataTypes, Sequelize } = require('sequelize');
 
 const { config } = require('../../config/config');
 const { DISCUSSION_TABLE } = require('./../models/discussion.model');
+const {USERS_TABLE } = require('./../models/users.model');
 
 const DISCUSSION_LIKES_TABLE = 'netw_discussion_likes';
 
@@ -41,14 +42,21 @@ const DiscussionLikesSchema = {
     userId: {
         allowNull: false,
         type: DataTypes.INTEGER,
-        field: 'user_id'
+        field: 'user_id',
+        foreignKey: true,
+        references: {
+            model: USERS_TABLE,
+            key: 'id'
+        },
+        onUpdate: 'CASCADE',
+        onDelete: 'SET NULL'
     }
 }
 
 class DiscussionLikes extends Model{
     static associate(models) {
         this.belongsTo(models.Discussion, {as:'discussion'})
-
+        this.belongsTo(models.Users, {as:'users', foreignKey: 'user_id'} )
     }
 
     static config(sequelize) {

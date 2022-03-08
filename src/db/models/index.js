@@ -6,6 +6,7 @@ const { ContributionType, ContributionTypeSchema } = require('./contributionType
 const { Contribution, ContributionSchema } = require('./contributions.model');
 
 const { DiscussionLikes, DiscussionLikesSchema } = require('./likes.model');
+const { Users, UsersSchema } = require('../models/users.model');
 
 
 
@@ -20,6 +21,7 @@ function setupModels(sequelize){
     
 
     DiscussionLikes.init(DiscussionLikesSchema, DiscussionLikes.config(sequelize))
+    Users.init(UsersSchema, Users.config(sequelize))
 
 
     Discussion.associate(sequelize.models)
