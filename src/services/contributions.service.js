@@ -34,8 +34,14 @@ class ContributionsService {
 
   async find() {
     const allContributions= await models.Contribution.findAll()
-    
-    return allContributions
+    const allContributionsUsers = await Promise.all(
+      allContributions.map(async function(contribution) {
+        const userName = await models.Users.findByPk(contribution.dataValues.userId);
+        return {...contribution.dataValues,
+                userFullName: userName.dataValues.fullName,
+                profileImage: userName.dataValues.profileImage}
+    }));
+    return allContributionsUsers
     
   }
 
@@ -44,8 +50,12 @@ class ContributionsService {
     if (!contribution) {
       throw new Error('contribution not found')
     }
-    return contribution
+    const userName = await models.Users.findByPk(contribution.dataValues.userId);
+    return {...contribution.dataValues,
+            userFullName: userName.dataValues.fullName,
+            profileImage: userName.dataValues.profileImage}
   }
+
   async findByDiscussionId(discussionId) {
     const contribution = await models.Contribution.findAll({
       where: {
@@ -55,7 +65,14 @@ class ContributionsService {
     if (!contribution) {
       throw new Error('contribution not found')
     }
-    return contribution
+    const allContributionsUsers = await Promise.all(
+      contribution.map(async function(contribution) {
+        const userName = await models.Users.findByPk(contribution.dataValues.userId);
+        return {...contribution.dataValues,
+                userFullName: userName.dataValues.fullName,
+                profileImage: userName.dataValues.profileImage}
+    }));
+    return allContributionsUsers
   }
 
   async findByContributionTypeId(discussionId,contributionTypeId) {
@@ -68,7 +85,14 @@ class ContributionsService {
     if (!contribution) {
       throw new Error('contribution not found')
     }
-    return contribution
+    const allContributionsUsers = await Promise.all(
+      contribution.map(async function(contribution) {
+        const userName = await models.Users.findByPk(contribution.dataValues.userId);
+        return {...contribution.dataValues,
+                userFullName: userName.dataValues.fullName,
+                profileImage: userName.dataValues.profileImage}
+    }));
+    return allContributionsUsers
   }
 
   async update(id,changes) {
